@@ -2,8 +2,7 @@
 pragma solidity 0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {IStableSwap3Pool} from
-    "../../../src/interfaces/curve/IStableSwap3Pool.sol";
+import {IStableSwap3Pool} from "../../../src/interfaces/curve/IStableSwap3Pool.sol";
 import {IERC20} from "../../../src/interfaces/IERC20.sol";
 import {DAI, USDC, USDT, CURVE_3POOL} from "../../../src/Constants.sol";
 
@@ -25,6 +24,11 @@ contract CurveV1SwapTest is Test {
         // Calculate swap from DAI to USDC
         // Write your code here
         uint256 dy = 0;
+        int128 i = 0; // DAI index
+        int128 j = 1; // USDC index
+        uint256 dx = 1e6 * 1e18; // 1,000,000 DAI in wei
+
+        dy = pool.get_dy_underlying(i, j, dx);
 
         console2.log("dy %e", dy);
         assertGt(dy, 0, "dy = 0");
@@ -35,6 +39,13 @@ contract CurveV1SwapTest is Test {
     function test_exchange() public {
         // Swap DAI to USDC
         // Write your code here
+        // function exchange(int128 i, int128 j, uint256 dx, uint256 min_dy)
+        int128 i = 0; // DAI index
+        int128 j = 1; // USDC index
+        uint256 dx = 1e6 * 1e18; // 1,000,000 DAI in wei
+        uint256 min_dy = pool.get_dy_underlying(i, j, dx);
+
+        pool.exchange(i, j, dx, min_dy);
 
         uint256 bal = usdc.balanceOf(address(this));
         console2.log("USDC balance %e", bal);
