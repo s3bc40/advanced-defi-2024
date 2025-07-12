@@ -2,16 +2,9 @@
 pragma solidity 0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {IStableSwap3Pool} from
-    "../../../src/interfaces/curve/IStableSwap3Pool.sol";
+import {IStableSwap3Pool} from "../../../src/interfaces/curve/IStableSwap3Pool.sol";
 import {IERC20} from "../../../src/interfaces/IERC20.sol";
-import {
-    DAI,
-    USDC,
-    USDT,
-    CURVE_3POOL,
-    CURVE_3CRV
-} from "../../../src/Constants.sol";
+import {DAI, USDC, USDT, CURVE_3POOL, CURVE_3CRV} from "../../../src/Constants.sol";
 
 contract CurveV1AddLiquidityTest is Test {
     IStableSwap3Pool private constant pool = IStableSwap3Pool(CURVE_3POOL);
@@ -30,6 +23,12 @@ contract CurveV1AddLiquidityTest is Test {
     // Add 1,000,000 DAI of liquidity to the pool contract
     function test_add_liquidity() public {
         // Write your code here
+        // function add_liquidity(uint256[3] calldata coins, uint256 min_lp)
+        uint256 dai_amount = 1e6 * 1e18;
+        uint256[3] memory coins = [dai_amount, 0, 0];
+        uint256 min_lp = 1e18;
+
+        pool.add_liquidity(coins, min_lp);
 
         uint256 lpBal = lp.balanceOf(address(this));
         assertGt(lpBal, 0);

@@ -2,16 +2,9 @@
 pragma solidity 0.8.24;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {IStableSwap3Pool} from
-    "../../../src/interfaces/curve/IStableSwap3Pool.sol";
+import {IStableSwap3Pool} from "../../../src/interfaces/curve/IStableSwap3Pool.sol";
 import {IERC20} from "../../../src/interfaces/IERC20.sol";
-import {
-    DAI,
-    USDC,
-    USDT,
-    CURVE_3POOL,
-    CURVE_3CRV
-} from "../../../src/Constants.sol";
+import {DAI, USDC, USDT, CURVE_3POOL, CURVE_3CRV} from "../../../src/Constants.sol";
 
 contract CurveV1RemoveLiquidityTest is Test {
     IStableSwap3Pool private constant pool = IStableSwap3Pool(CURVE_3POOL);
@@ -40,14 +33,15 @@ contract CurveV1RemoveLiquidityTest is Test {
         ];
 
         // Write your code here
+        // function remove_liquidity(uint256 lp, uint256[3] calldata min_coins)
+        uint256 lp_balance = lp.balanceOf(address(this));
+        pool.remove_liquidity(lp_balance, [uint256(1), uint256(1), uint256(1)]);
 
         uint256[3] memory balsAfter = [
             dai.balanceOf(address(this)),
             usdc.balanceOf(address(this)),
             usdt.balanceOf(address(this))
         ];
-
-        assertEq(lp.balanceOf(address(this)), 0, "3CRV balance > 0");
 
         assertEq(lp.balanceOf(address(this)), 0, "3CRV balance > 0");
 
@@ -73,6 +67,8 @@ contract CurveV1RemoveLiquidityTest is Test {
         ];
 
         // Write your code here
+        uint256 lp_balance = lp.balanceOf(address(this));
+        pool.remove_liquidity_one_coin(lp_balance, 0, uint256(1));
 
         uint256[3] memory balsAfter = [
             dai.balanceOf(address(this)),
